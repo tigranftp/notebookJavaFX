@@ -7,6 +7,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -53,7 +55,8 @@ public class HelloController {
     private TableColumn description;
     @FXML
     private TableColumn category;
-
+    @FXML
+    private VBox mainVBOX;
 
     @FXML
     public void initialize() throws FileNotFoundException {
@@ -78,7 +81,8 @@ public class HelloController {
 
         link.prefWidthProperty().bind(main_table.widthProperty().multiply(0.333));
         description.prefWidthProperty().bind(main_table.widthProperty().multiply(0.333));
-        category.prefWidthProperty().bind(main_table.widthProperty().multiply(0.334));
+        category.prefWidthProperty().bind(main_table.widthProperty().multiply(0.333));
+        mainVBOX.setVgrow(main_table, Priority.ALWAYS);
     }
 
     @FXML
@@ -175,7 +179,6 @@ public class HelloController {
         LinkClass selectedItem = main_table.getSelectionModel().getSelectedItem();
         actualList.remove(selectedItem);
         UpdateMenu();
-        //main_table.setItems(filteredList);
         AtomicReference<Boolean> needToDelete = new AtomicReference<>(true);
         main_table.getItems().forEach(lc -> {
             if (Objects.equals(lc.getCategory(), selectedItem.getCategory())) {
