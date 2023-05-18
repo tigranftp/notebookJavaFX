@@ -177,6 +177,9 @@ public class HelloController {
     @FXML
     protected void on_click_delete_button() {
         LinkClass selectedItem = main_table.getSelectionModel().getSelectedItem();
+        if (selectedItem == null) {
+            return;
+        }
         actualList.remove(selectedItem);
         UpdateMenu();
         AtomicReference<Boolean> needToDelete = new AtomicReference<>(true);
