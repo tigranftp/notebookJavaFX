@@ -7,6 +7,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
@@ -35,12 +37,17 @@ public class HelloController {
 
     @FXML
     private Button add_button;
+    @FXML
+    private Button deleteButton;
 
 
     @FXML
     private TextField linkTextField;
     @FXML
     private MenuButton menuButton;
+    @FXML
+    private GridPane gridOfAdd;
+
 
     @FXML
     private TextField descriptionTextField;
@@ -57,6 +64,8 @@ public class HelloController {
     private TableColumn category;
     @FXML
     private VBox mainVBOX;
+    @FXML
+    private HBox HBoxLinkAdd;
 
     @FXML
     public void initialize() throws FileNotFoundException {
@@ -80,9 +89,20 @@ public class HelloController {
 
 
         link.prefWidthProperty().bind(main_table.widthProperty().multiply(0.333));
-        description.prefWidthProperty().bind(main_table.widthProperty().multiply(0.333));
-        category.prefWidthProperty().bind(main_table.widthProperty().multiply(0.333));
+        description.prefWidthProperty().bind(main_table.widthProperty().multiply(0.466));
+        category.prefWidthProperty().bind(main_table.widthProperty().multiply(0.200));
         mainVBOX.setVgrow(main_table, Priority.ALWAYS);
+        HBoxLinkAdd.setHgrow(gridOfAdd, Priority.ALWAYS);
+        deleteButton.prefWidthProperty().bind(HBoxLinkAdd.widthProperty().multiply(0.200));
+        add_button.prefWidthProperty().bind(HBoxLinkAdd.widthProperty().multiply(0.200));
+
+        main_table.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                linkTextField.setText(newSelection.getLink());
+                descriptionTextField.setText(newSelection.getDescription());
+                categoryTextField.setText(newSelection.getCategory());
+            }
+        });
     }
 
     @FXML
@@ -182,6 +202,9 @@ public class HelloController {
         }
         actualList.remove(selectedItem);
         UpdateMenu();
+        linkTextField.setText("");
+        descriptionTextField.setText("");
+        categoryTextField.setText("");
         AtomicReference<Boolean> needToDelete = new AtomicReference<>(true);
         main_table.getItems().forEach(lc -> {
             if (Objects.equals(lc.getCategory(), selectedItem.getCategory())) {
